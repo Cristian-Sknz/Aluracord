@@ -20,7 +20,8 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@styles/*": ["styles/*"]
+      "@styles/*": ["styles/*"],
+      "@components/*": ["src/components/*"]
     }
   },
   "include": [
