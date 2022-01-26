@@ -17,17 +17,22 @@ import {
 const RemImage = '/images/avatar/RemUwU.png';
 
 const Home: React.FC = () => {
-  const [username, setUsername] = useState('Cristian-SknZ');
-  const imageRef = useRef<HTMLImageElement>();
+  const [username, setUsername] = useState<string>('Cristian-SknZ');
+  const [error, setError] = useState<boolean>(false);
 
   const onImageError = useCallback(() => {
-    imageRef.current.src = RemImage;
-  },[imageRef])
-
-  const onInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.currentTarget.value);
+    setError(true);
   },[]);
 
+  const onInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    if (username.length == 0) {
+      setError(true)
+      setUsername(e.currentTarget.value);
+      return;
+    }
+    setError(false);
+    setUsername(e.currentTarget.value);
+  },[]);
 
   return (
     <HomeContainer>
@@ -45,18 +50,17 @@ const Home: React.FC = () => {
               value={username}
               placeholder='Digite um usuário'
             />
-            <LoginButton disabled={username.length == 0}>Entrar</LoginButton>
+            <LoginButton disabled={error}>Entrar</LoginButton>
           </LoginForm>
         </LoginContainer>
 
         <ProfileContainer>
           <UserImage 
-            ref={imageRef} 
-            onError={onImageError} 
-            alt={username} 
-            src={`https://github.com/${username}.png`}
+            onError={onImageError}
+            alt={`${username} - Github Avatar`} 
+            src={(error) ? RemImage : `https://github.com/${username}.png`}
           />
-          <Username>{(username.length == 0) ? 'Ram (¬‿¬)' : username}</Username>
+          <Username>{(error) ? 'Ram (¬‿¬)' : username}</Username>
         </ProfileContainer>
       </LoginBox>
     </HomeContainer>
