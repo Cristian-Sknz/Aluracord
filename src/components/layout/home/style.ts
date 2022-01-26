@@ -97,13 +97,27 @@ export const LoginButton = styled.button`
   color: ${({theme}) => useNeutralColor(theme, '050')};
   background: ${({theme}) => usePrimaryColor(theme, 700)};
   border: none;
-  cursor: pointer;
   user-select: none;
 
   border-radius: 0.35rem;
   margin: 1rem 0;
   width: 100%;
   padding: 0.5rem;
+
+  :hover {
+    :disabled {
+      cursor: not-allowed;
+      background: ${({theme}) => useNeutralColor(theme, '500')};
+    }
+    cursor: pointer;
+    background: ${({theme}) => usePrimaryColor(theme, 600)};
+    transition: 500ms;
+  }
+  :focus {
+    background: ${({theme}) => usePrimaryColor(theme, 800)};
+    transition: 500ms;
+  }
+  transition: 500ms;
 `;
 
 export const ProfileContainer = styled.div`

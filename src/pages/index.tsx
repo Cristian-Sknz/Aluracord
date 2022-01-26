@@ -1,5 +1,5 @@
-import Head from 'next/head'
 import React from 'react'
+import Head from 'next/head'
 import Home from '@components/layout/home'
 
 const Index = () => {
@@ -15,4 +15,4 @@ const Index = () => {
   )
 }
 
-export default Index
+export default Index;

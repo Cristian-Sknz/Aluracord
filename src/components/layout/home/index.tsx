@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
 import {
   HomeContainer,
   LoginContainer,
@@ -14,7 +14,21 @@ import {
   Username,
 } from './style';
 
+const RemImage = '/images/avatar/RemUwU.png';
+
 const Home: React.FC = () => {
+  const [username, setUsername] = useState('Cristian-SknZ');
+  const imageRef = useRef<HTMLImageElement>();
+
+  const onImageError = useCallback(() => {
+    imageRef.current.src = RemImage;
+  },[imageRef])
+
+  const onInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.currentTarget.value);
+  },[]);
+
+
   return (
     <HomeContainer>
       <LoginBox>
@@ -26,14 +40,23 @@ const Home: React.FC = () => {
           </LoginHeader>
 
           <LoginForm>
-            <LoginInput />
-            <LoginButton>Entrar</LoginButton>
+            <LoginInput 
+              onChange={onInputChange} 
+              value={username}
+              placeholder='Digite um usuário'
+            />
+            <LoginButton disabled={username.length == 0}>Entrar</LoginButton>
           </LoginForm>
         </LoginContainer>
 
         <ProfileContainer>
-          <UserImage src={'https://s3.getstickerpack.com/storage/uploads/sticker-pack/random-anime-pack-4/sticker_22.png?980c87d7addc8d89a8b7fd2440d0ed4f&d=200x200'}/>
-          <Username>Cristian-SknZ</Username>
+          <UserImage 
+            ref={imageRef} 
+            onError={onImageError} 
+            alt={username} 
+            src={`https://github.com/${username}.png`}
+          />
+          <Username>{(username.length == 0) ? 'Ram (¬‿¬)' : username}</Username>
         </ProfileContainer>
       </LoginBox>
     </HomeContainer>
