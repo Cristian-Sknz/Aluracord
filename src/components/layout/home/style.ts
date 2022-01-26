@@ -2,7 +2,12 @@ import styled from 'styled-components';
 import { useNeutralColor, usePrimaryColor } from '@styles/global';
 
 export const HomeContainer = styled.div`
-  background-color: #999;
+  background-color: ${({theme}) => theme.colors.background};
+  background-image: url('/images/background/rezero-minimalist.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
   height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;

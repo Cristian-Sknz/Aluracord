@@ -29,6 +29,7 @@ const DefaultAppTheme: DefaultTheme = {
       900: '#101418',
       999: '#080A0C',
     },
+    background: '#9c7f91',
   },
   stickers: [
     'https://www.alura.com.br/imersao-react-4/assets/figurinhas/Figurinha_1.png',

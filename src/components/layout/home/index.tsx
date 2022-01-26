@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         <LoginContainer>
           <LoginHeader>
             <Title>Boas vindas de volta!</Title>
-            <Subtitle>Aluracord - Alura Matrix</Subtitle>
+            <Subtitle>Aluracord - Re:Zero</Subtitle>
           </LoginHeader>
 
           <LoginForm>

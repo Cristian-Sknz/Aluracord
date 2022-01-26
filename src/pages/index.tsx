@@ -6,7 +6,7 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>AluraCord - Imersão React</title>
+        <title>Aluracord - Imersão React</title>
       </Head>
       <>
         <Home/>

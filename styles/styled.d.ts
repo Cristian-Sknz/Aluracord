@@ -37,6 +37,7 @@ declare module 'styled-components' {
     colors: {
       primary: ColorVariants;
       neutral: ColorVariants;
+      background: string;
     };
     stickers: Sticker[];
   }
