@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const ChatContext = React.createContext({} as ChatContextType);
 
@@ -14,24 +14,17 @@ type ChatContextType = {
   messages: Message[];
 };
 
-
-const INITIAL_STATE: Message[] = [
-  {
-    id: 0,
-    author: 'Cristian-SknZ',
-    avatarUrl: 'https://github.com/cristian-sknz.png',
-    date: 'Hoje as 19:10',
-    message: 'Hello World',
-  },
-];
-
 const ChatProvider: React.FC = ({ children }) => {
-  const [messages, setMessages] = useState<Message[]>(INITIAL_STATE);
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    fetch('/api/messages')
+      .then((response) => response.json())
+      .then((data: Message[]) => setMessages(data));
+  }, []);
 
   return (
-    <ChatContext.Provider value={{ messages }}>
-      {children}
-    </ChatContext.Provider>
+    <ChatContext.Provider value={{ messages }}>{children}</ChatContext.Provider>
   );
 };
 
