@@ -9,6 +9,8 @@ import {
   LogoutButton,
   ChatMessageContainer,
   ChatMessageList,
+  ChatInputContainer,
+  ChatInput,
 } from './style';
 
 const Chat: React.FC = () => {
@@ -24,11 +26,20 @@ const Chat: React.FC = () => {
 
         <ChatMessageContainer>
           <ChatMessageList>
-            {messages.map((message) => (
-              <ChatMessage message={message} />
+            {messages.map((data) => (
+              <ChatMessage message={data} key={data.id} />
             ))}
           </ChatMessageList>
         </ChatMessageContainer>
+
+        <ChatInputContainer>
+          <ChatInput
+            name='message'
+            placeholder='Digite uma mensagem!'
+            maxRows={10}
+            maxLength={500}
+          />
+        </ChatInputContainer>
       </ChatBox>
     </ChatContainer>
   );

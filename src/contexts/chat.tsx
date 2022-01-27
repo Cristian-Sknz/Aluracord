@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 export const ChatContext = React.createContext({} as ChatContextType);
 
 export type Message = {
+  id: number;
   avatarUrl: string;
   author: string;
   date: string;
@@ -14,8 +15,9 @@ type ChatContextType = {
 };
 
 
-const INITIAL_STATE = [
+const INITIAL_STATE: Message[] = [
   {
+    id: 0,
     author: 'Cristian-SknZ',
     avatarUrl: 'https://github.com/cristian-sknz.png',
     date: 'Hoje as 19:10',

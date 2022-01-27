@@ -1,3 +1,4 @@
+import TextareaAutoresize from 'react-textarea-autosize';
 import { useNeutralColor } from '@styles/global';
 import styled from 'styled-components';
 
@@ -30,7 +31,7 @@ export const ChatBox = styled.div`
   max-height: 560px;
   padding: 2rem;
 
-  background-color: ${({theme}) => useNeutralColor(theme, '700')};
+  background-color: ${({ theme }) => useNeutralColor(theme, '700')};
 `;
 
 export const ChatHeader = styled.header`
@@ -40,13 +41,13 @@ export const ChatHeader = styled.header`
 `;
 
 export const ChatTitle = styled.h3`
-  color: ${({theme}) => useNeutralColor(theme, '100')};
+  color: ${({ theme }) => useNeutralColor(theme, '100')};
   font-family: Poppins, sans-serif;
 `;
 
 export const LogoutButton = styled.a`
-  color: ${({theme}) => useNeutralColor(theme, '100')};
-  font-size: .9rem;
+  color: ${({ theme }) => useNeutralColor(theme, '100')};
+  font-size: 0.9rem;
   font-family: Poppins, sans-serif;
   text-decoration: none;
 
@@ -54,14 +55,58 @@ export const LogoutButton = styled.a`
 `;
 
 export const ChatMessageContainer = styled.div`
-  background: ${({theme}) => useNeutralColor(theme, '600')};
-  min-height: 480px;
+  background: ${({ theme }) => useNeutralColor(theme, '600')};
+
   margin: 1rem 0;
-  padding: .5rem;
+  padding: 0.5rem;
   overflow-y: auto;
 `;
 
 export const ChatMessageList = styled.ul`
   display: flex;
   flex-direction: column;
+`;
+
+export const ChatInputContainer = styled.div`
+  background-color: ${({ theme }) => useNeutralColor(theme, '600')};
+  border-radius: 0.5rem;
+  display: flex;
+
+  width: 100%;
+  padding: 0.5rem 0;
+`;
+
+export const ChatInput = styled(TextareaAutoresize)`
+  background-color: transparent;
+  color: ${({ theme }) => useNeutralColor(theme, '050')};
+  border: none;
+
+  font-family: Roboto, sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  resize: none;
+
+  width: 100%;
+  padding: 0.1rem 0.5rem;
+
+  :focus-visible {
+    outline: none;
+  }
+  :disabled {
+    cursor: not-allowed;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0.4rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => useNeutralColor(theme, '800')};
+    border-radius: 20px;
+  }
 `;
