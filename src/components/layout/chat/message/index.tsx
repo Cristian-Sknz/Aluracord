@@ -5,7 +5,7 @@ import {
   Author,
   Avatar,
   ChatMessageItem,
-  Message as StyledMessage,
+  MessageLine,
   MessageAuthor,
   MessageContainer,
   MessageDate,
@@ -26,13 +26,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           <Avatar src={message.avatarUrl} />
           <Author>{message.author}</Author>
         </MessageAuthor>
-        <MessageDate title={date.format('LLLL')}>
-          {date.calendar()}
-        </MessageDate>
+        <MessageDate title={date.format('LLLL')}>{date.calendar()}</MessageDate>
       </MessageDetails>
 
       <MessageContainer>
-        <StyledMessage>{message.message}</StyledMessage>
+        {message.message.split('\n').map((value) => (
+          <MessageLine>{value}</MessageLine>
+        ))}
       </MessageContainer>
     </ChatMessageItem>
   );

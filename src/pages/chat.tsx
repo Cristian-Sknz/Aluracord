@@ -22,7 +22,6 @@ const ChatPage: React.FC = () => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { 'aluracord-token' : token } = parseCookies(ctx);
-  const secret = process.env.APPLICATION_SECRET;
   if (token) {
     try {
       Jwt.verify(token, process.env.APPLICATION_SECRET);

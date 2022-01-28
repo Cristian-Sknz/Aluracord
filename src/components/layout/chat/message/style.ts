@@ -44,11 +44,11 @@ export const MessageContainer = styled.div`
   margin-left: 2.5rem;
 `;
 
-export const Message = styled.p`
+export const MessageLine = styled.p`
   color: ${({theme}) => useNeutralColor(theme, '050')};
   font-weight: 300;
   line-break: anywhere;
   line-height: 1.2;
   max-width: 900px;
-  
+  margin: 0;
 `;

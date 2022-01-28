@@ -17,28 +17,34 @@ export type GithubUser = {
 
 type AuthContextType = {
   isAutenticated: boolean;
+  loading: boolean;
   user: GithubUser;
   authenticate(name: string): void;
   logout(): void;
 };
 
-export const AuthContext = React.createContext({} as AuthContextType);
+const AuthContext = React.createContext({} as AuthContextType);
 
 const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<GithubUser>();
+  const [user, setUser] = useState<GithubUser>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => fetchUser(), []);
 
   const fetchUser = useCallback(() => {
     const { 'aluracord-token': token } = parseCookies();
     if (!token) {
+      setLoading(false);
       return;
     }
+    setLoading(true);
     getUser(token).then(async (response) => {
       if (response.status !== 200) {
+        setLoading(false);
         return;
       }
       setUser((await response.json()) as GithubUser);
+      setLoading(false);
     });
   }, []);
 
@@ -61,12 +67,14 @@ const AuthProvider: React.FC = ({ children }) => {
       return;
     }
     destroyCookie(null, 'aluracord-token');
+    Router.push('/').then(() => setUser(null));
   }, [])
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        loading,
         isAutenticated: !!user,
         authenticate,
         logout
@@ -77,4 +85,6 @@ const AuthProvider: React.FC = ({ children }) => {
   );
 };
 
+
+export const useAuth = () => React.useContext(AuthContext);
 export default AuthProvider;

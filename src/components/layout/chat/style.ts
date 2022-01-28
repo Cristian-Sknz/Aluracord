@@ -1,5 +1,5 @@
 import TextareaAutoresize from 'react-textarea-autosize';
-import { useNeutralColor } from '@styles/global';
+import { customScrollbar, useNeutralColor } from '@styles/global';
 import styled from 'styled-components';
 
 export const ChatContainer = styled.div`
@@ -28,7 +28,7 @@ export const ChatBox = styled.div`
   flex-direction: column;
   grid-area: chat;
   width: 100%;
-  max-height: 560px;
+  height: 80vh;
   padding: 2rem;
 
   background-color: ${({ theme }) => useNeutralColor(theme, '700')};
@@ -45,11 +45,13 @@ export const ChatTitle = styled.h3`
   font-family: Poppins, sans-serif;
 `;
 
-export const LogoutButton = styled.a`
+export const LogoutButton = styled.button`
+  background: transparent;
   color: ${({ theme }) => useNeutralColor(theme, '100')};
   font-size: 0.9rem;
   font-family: Poppins, sans-serif;
   text-decoration: none;
+  cursor: pointer;
 
   border: none;
 `;
@@ -60,6 +62,8 @@ export const ChatMessageContainer = styled.div`
   margin: 1rem 0;
   padding: 0.5rem;
   overflow-y: auto;
+  flex-grow: 2;
+  ${customScrollbar}
 `;
 
 export const ChatMessageList = styled.ul`
@@ -92,21 +96,9 @@ export const ChatInput = styled(TextareaAutoresize)`
   :focus-visible {
     outline: none;
   }
+
   :disabled {
     cursor: not-allowed;
   }
-
-  ::-webkit-scrollbar {
-    width: 0.4rem;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 0.5rem;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => useNeutralColor(theme, '800')};
-    border-radius: 20px;
-  }
+  ${customScrollbar}
 `;

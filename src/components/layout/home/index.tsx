@@ -1,5 +1,5 @@
-import React, { ChangeEvent, FormEvent, useCallback, useContext, useRef, useState } from 'react';
-import { AuthContext } from '@contexts/auth';
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import { useAuth } from '@contexts/auth';
 import {
   HomeContainer,
   LoginContainer,
@@ -20,7 +20,7 @@ const RemImage = '/images/avatar/RemUwU.png';
 const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('Cristian-SknZ');
   const [error, setError] = useState<boolean>(false);
-  const { authenticate } = useContext(AuthContext);
+  const { authenticate } = useAuth();
 
   const onImageError = useCallback(() => {
     setError(true);
