@@ -30,8 +30,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       </MessageDetails>
 
       <MessageContainer>
-        {message.message.split('\n').map((value) => (
-          <MessageLine>{value}</MessageLine>
+        {message.message.split('\n').map((value, line) => (
+          <MessageLine key={line}>{value}</MessageLine>
         ))}
       </MessageContainer>
     </ChatMessageItem>

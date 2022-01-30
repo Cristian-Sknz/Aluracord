@@ -65,7 +65,6 @@ function methodNotAllowed(method: string, res: NextApiResponse<any>): boolean {
 }
 
 function isBadCredentials(body: any, res: NextApiResponse<any>) {
-  console.log(body);
   if (!JSON.parse(body).username) {
     res.status(401).json({
       message: 'Verifique suas credencias, elas estão incorretas.',

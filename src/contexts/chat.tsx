@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
+import supabase from 'src/lib/supabase';
 import { GithubUser, useAuth } from './auth';
 
 const ChatContext = React.createContext({} as ChatContextType);
@@ -26,22 +27,54 @@ function createMessage(user: GithubUser, message: string): Message {
   };
 }
 
-const ChatProvider: React.FC = ({ children }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const chatInteractions = () => {
+  const builder = supabase.from<Message>('messages');
   const { user } = useAuth();
 
   const sendMessage = useCallback((message: string) => {
-    setMessages([...messages, createMessage(user, message)]);
-  }, [messages, user]);
+    builder.insert(createMessage(user, message)).then();
+  }, [user]);
+
+  const deleteMessage = useCallback((id: number) => {
+    builder.delete().match({ 'id': id })
+  },[])
+
+  return {
+    builder,
+    sendMessage
+  };
+}
+
+const ChatProvider: React.FC = ({ children }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState<Message>(null);
+  const chat = chatInteractions();
+  const { builder } = chat;
+
+  const fetchMessages = useCallback(() => {
+    builder.select('*').then(({ data }) => {
+      setMessages(data as Message[]);
+    });
+  }, []);
+
+  const useRealtimeChat = useCallback(() => {
+    return builder.on('INSERT', (event) => setNewMessage(event.new)).subscribe();
+  }, []);
 
   useEffect(() => {
-    fetch('/api/messages')
-      .then((response) => response.json())
-      .then((data: Message[]) => setMessages(data));
+    if (newMessage) {
+      setMessages([...messages, newMessage]);
+    }
+  }, [newMessage]);
+
+  useEffect(() => {
+    const realtime = useRealtimeChat();
+    fetchMessages();
+    return () => { realtime.unsubscribe(); }
   }, []);
 
   return (
-    <ChatContext.Provider value={{ messages, sendMessage }}>
+    <ChatContext.Provider value={{ sendMessage: chat.sendMessage, messages }}>
       {children}
     </ChatContext.Provider>
   );

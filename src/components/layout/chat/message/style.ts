@@ -5,6 +5,12 @@ export const ChatMessageItem = styled.li`
   display: flex;
   flex-direction: column;
   padding: .5rem;
+  transition: 500ms;
+
+  :hover {
+    background: rgba(0, 0, 0, 0.15);
+    transition: 500ms;
+  }
 `;
 
 export const MessageDetails = styled.div`

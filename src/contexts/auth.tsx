@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import { getUser, signIn } from 'src/lib/api';
+import Jwt from 'jsonwebtoken'; 
 import Router from 'next/router';
 
 export type GithubUser = {
@@ -68,7 +69,7 @@ const AuthProvider: React.FC = ({ children }) => {
     }
     destroyCookie(null, 'aluracord-token');
     Router.push('/').then(() => setUser(null));
-  }, [])
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -77,7 +78,7 @@ const AuthProvider: React.FC = ({ children }) => {
         loading,
         isAutenticated: !!user,
         authenticate,
-        logout
+        logout,
       }}
     >
       {children}
@@ -85,6 +86,18 @@ const AuthProvider: React.FC = ({ children }) => {
   );
 };
 
+export const isValidToken = (ctx?: any) => {
+  const { 'aluracord-token': token } = parseCookies(ctx);
+  try {
+    if (token) {
+      Jwt.verify(token, process.env.APPLICATION_SECRET);
+      return true;
+    }
+  } catch (ignore) {
+    destroyCookie(ctx, 'aluracord-token');
+  }
+  return false;
+};
 
 export const useAuth = () => React.useContext(AuthContext);
 export default AuthProvider;

@@ -3,9 +3,8 @@ import Head from 'next/head';
 import Chat from '@components/layout/chat';
 import ChatProvider from 'src/contexts/chat';
 
-import { parseCookies, destroyCookie } from 'nookies';
 import { GetServerSideProps } from 'next';
-import Jwt from 'jsonwebtoken';
+import { isValidToken } from '@contexts/auth';
 
 const ChatPage: React.FC = () => {
   return (
@@ -21,23 +20,15 @@ const ChatPage: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'aluracord-token' : token } = parseCookies(ctx);
-  if (token) {
-    try {
-      Jwt.verify(token, process.env.APPLICATION_SECRET);
-      return {
-        props: {}
+  if (!isValidToken(ctx)) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
       }
-    } catch (err) {
-      destroyCookie(ctx, 'aluracord-token');
     }
   }
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    }
-  }
+  return {props: {}};
 }
 
 export default ChatPage;

@@ -16,24 +16,24 @@ import {
 
 const Chat: React.FC = () => {
   const input = useRef<HTMLTextAreaElement>();
-  const {loading, logout} = useAuth();
+  const { loading, logout } = useAuth();
   const chat = useChat();
 
   const send = useCallback(() => {
-    const value = input.current.value
+    const value = input.current.value;
     if (value.length === 0) {
       return;
     }
     input.current.value = '';
     chat.sendMessage(value);
-  },[chat])
+  }, [chat]);
 
   const onSend = useCallback((e: KeyboardEvent) => {
-    if(!e.shiftKey && e.key === 'Enter') {
-      e.preventDefault();
-      send();
-    }
-  }, [send])
+      if (!e.shiftKey && e.key === 'Enter') {
+        e.preventDefault();
+        send();
+      }
+    }, [send]);
 
   return (
     <ChatContainer>
@@ -42,11 +42,10 @@ const Chat: React.FC = () => {
           <ChatTitle>Chat</ChatTitle>
           <LogoutButton onClick={logout}>Logout</LogoutButton>
         </ChatHeader>
-
         <ChatMessageContainer>
           <ChatMessageList>
-            {chat.messages.map((data, index) => (
-              <ChatMessage message={data} key={index} />
+            {chat.messages.map((data) => (
+              <ChatMessage message={data} key={data.id} />
             ))}
           </ChatMessageList>
         </ChatMessageContainer>
@@ -54,7 +53,9 @@ const Chat: React.FC = () => {
         <ChatInputContainer>
           <ChatInput
             name='message'
-            placeholder={(loading) ? 'Aguarde, carregando o chat!' : 'Digite uma mensagem!'}
+            placeholder={
+              loading ? 'Aguarde, carregando o chat!' : 'Digite uma mensagem!'
+            }
             maxRows={10}
             maxLength={500}
             onKeyPress={onSend}
@@ -64,7 +65,7 @@ const Chat: React.FC = () => {
         </ChatInputContainer>
       </ChatBox>
     </ChatContainer>
-  );
+  ); 
 };
 
 export default Chat;
