@@ -57,6 +57,17 @@ export const MessageDate = styled.span`
   font-family: Poppins, sans-serif;
 `;
 
+export const IsEdited = styled.span`
+  color: ${({theme}) => useNeutralColor(theme, '300')};
+  font-size: .6rem;
+  font-family: Poppins, sans-serif;
+  display: none;
+  margin: 0 .2rem;
+  &.edited {
+    display: inline;
+  }
+`;
+
 export const MessageContainer = styled.div`
   margin: .3rem 0;
   padding: 0 .3rem;
@@ -64,6 +75,7 @@ export const MessageContainer = styled.div`
 `;
 
 export const MessageLine = styled.p`
+  display: inline-block;
   color: ${({theme}) => useNeutralColor(theme, '050')};
   font-weight: 300;
   line-break: anywhere;
@@ -82,5 +94,28 @@ export const Tools = styled.li`
   cursor: pointer;
   :hover {
     background: ${({theme}) => useNeutralColor(theme, '700')};
+  }
+`;
+
+export const ChangeActionDisplay = styled.div`
+  background-color: ${({ theme }) => useNeutralColor(theme, '800')};
+  color: ${({ theme }) => useNeutralColor(theme, '300')};
+  font-size: .9rem;
+  font-weight: 300;
+  padding: .3rem;
+  border-radius: .5rem .5rem 0 0;
+  position: relative;
+  top: -.5rem;
+`;
+
+export const ChangeActionCancelButton = styled.button`
+  margin: 0 .3rem;
+  padding: .1rem .2rem;
+  border: none;
+  color: ${({ theme }) => useNeutralColor(theme, '050')};
+  background: transparent;
+  cursor: pointer;
+  & * {
+    vertical-align: bottom;
   }
 `;

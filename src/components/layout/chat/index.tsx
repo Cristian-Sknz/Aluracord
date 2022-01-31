@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useCallback, useRef } from 'react';
+import React, { KeyboardEvent, useCallback, useReducer, useRef, Reducer } from 'react';
 import { useAuth } from '@contexts/auth';
 import { useChat } from '@contexts/chat';
 import ChatMessage from './message';
@@ -11,29 +11,118 @@ import {
   ChatMessageContainer,
   ChatMessageList,
   ChatInputContainer,
-  ChatInput,
+  ChatInput
 } from './style';
+import ActionDisplay from './message/display';
+import { Message } from '@contexts/types';
+
+type UserChatState = {
+  action: UserChatAction;
+  messageId?: number;
+};
+
+export enum UserChatAction {
+  DEFAULT_MESSAGE = 'DEFAULT_MESSAGE',
+  EDIT_MESSAGE = 'EDIT_MESSAGE',
+  REPLY_MESSAGE = 'REPLY_MESSAGE',
+}
+
+type UserChatActionHandler = {
+  type: UserChatAction;
+  payload?: any;
+};
+
+const INITIAL_STATE = {
+  action: UserChatAction.DEFAULT_MESSAGE,
+  messageId: 0,
+};
+
+const userChatReducer: Reducer<UserChatState, UserChatActionHandler> = (state, action) => {
+  switch (action.type) {
+    case UserChatAction.EDIT_MESSAGE: {
+      return {
+        action: action.type,
+        messageId: action.payload.id,
+      };
+    }
+    case UserChatAction.DEFAULT_MESSAGE: {
+      return {
+        action: action.type,
+      };
+    }
+    case UserChatAction.REPLY_MESSAGE: {
+      return {
+        action: action.type,
+        messageId: action.payload.id,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
 
 const Chat: React.FC = () => {
-  const input = useRef<HTMLTextAreaElement>();
+  const [state, dispatch] = useReducer(userChatReducer, INITIAL_STATE);
   const { user, loading, logout } = useAuth();
+  const input = useRef<HTMLTextAreaElement>();
   const chat = useChat();
 
-  const send = useCallback(() => {
+  const handleMessageAction = useCallback(() => {
     const value = input.current.value;
     if (value.length === 0) {
       return;
     }
     input.current.value = '';
-    chat.sendMessage(value);
-  }, [chat]);
+    switch (state.action) {
+      case UserChatAction.EDIT_MESSAGE: {
+        chat.action.editMessage(value, state.messageId);
+        dispatch({ type: UserChatAction.DEFAULT_MESSAGE });
+        break;
+      }
+      case UserChatAction.REPLY_MESSAGE: {
+        chat.action.replyMessage(value, state.messageId);
+        dispatch({ type: UserChatAction.DEFAULT_MESSAGE })
+        break;
+      }
+      case UserChatAction.DEFAULT_MESSAGE: {
+        chat.action.sendMessage(value);
+        break;
+      }
+    }
+  }, [chat, state]);
+
+  const onReply = (message: Message) => {
+    dispatch({
+      type: UserChatAction.REPLY_MESSAGE,
+      payload: { id: message.id },
+    })
+  };
+  
+  const onEdit = (message: Message) => {
+    input.current.value = message.message;
+    dispatch({
+      type: UserChatAction.EDIT_MESSAGE,
+      payload: { id: message.id },
+    });
+  }
+
+  const onDelete = (message: Message) => {
+    chat.action.deleteMessage(message.id);
+  };
+
+  const onCancel = () => {
+    dispatch({
+      type: UserChatAction.DEFAULT_MESSAGE,
+    });
+  }
 
   const onSend = useCallback((e: KeyboardEvent) => {
-      if (!e.shiftKey && e.key === 'Enter') {
-        e.preventDefault();
-        send();
-      }
-    }, [send]);
+    if (!e.shiftKey && e.key === 'Enter') {
+      e.preventDefault();
+      handleMessageAction();
+    }
+  }, [handleMessageAction]);
 
   return (
     <ChatContainer>
@@ -45,17 +134,24 @@ const Chat: React.FC = () => {
         <ChatMessageContainer>
           <ChatMessageList>
             {chat.state.messages.map((data) => (
-              <ChatMessage 
-                onReply={(id) => console.log('Respondendo a mensagem:', id)}
-                onDelete={(data.author == user?.id) ? (id) => chat.deleteMessage(id) : null}
-                onEdit={(data.author == user?.id) ? (id) => console.log('Editando a mensagem:', id) : null}
-                message={data} 
-                key={data.id} />
+              <ChatMessage
+                own={data.author == user?.id}
+                onReply={onReply}
+                onDelete={onDelete}
+                onEdit={onEdit}
+                message={data}
+                key={data.id}
+              />
             ))}
           </ChatMessageList>
         </ChatMessageContainer>
 
         <ChatInputContainer>
+          <ActionDisplay 
+            action={state.action}
+            message={chat.state.messages.filter((msg) => msg.id == state.messageId)[0]}
+            onCancel={onCancel}
+          />
           <ChatInput
             name='message'
             placeholder={
@@ -70,7 +166,7 @@ const Chat: React.FC = () => {
         </ChatInputContainer>
       </ChatBox>
     </ChatContainer>
-  ); 
+  );
 };
 
 export default Chat;

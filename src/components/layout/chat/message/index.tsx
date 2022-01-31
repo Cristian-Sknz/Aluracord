@@ -9,6 +9,7 @@ import {
   MessageContainer,
   MessageDate,
   MessageDetails,
+  IsEdited,
 } from './style';
 import { Message } from '@contexts/types';
 import MessageTools, { MessageToolsProps } from './tools';
@@ -19,11 +20,11 @@ type ChatMessageProps = {
 
 const ChatMessage: React.FC<ChatMessageProps> = (props) => {
   const date = moment(props.message.date);
-
   return (
     <ChatMessageItem>
       <MessageTools
-        id={props.message.id}
+        message={props.message}
+        own={props.own}
         onReply={props.onReply}
         onEdit={props.onEdit}
         onDelete={props.onDelete}
@@ -40,6 +41,7 @@ const ChatMessage: React.FC<ChatMessageProps> = (props) => {
         {props.message.message.split('\n').map((value, line) => (
           <MessageLine key={line}>{value}</MessageLine>
         ))}
+        {props.message.edited && <IsEdited className={'edited'}>(editado)</IsEdited>}
       </MessageContainer>
     </ChatMessageItem>
   );

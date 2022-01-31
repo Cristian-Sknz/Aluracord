@@ -17,6 +17,9 @@ export type Message = {
   date?: string;
   message: string;
   message_type: MessageType;
+  reply?: number;
+  edited?: boolean;
+
   users?: GithubUser;
 };
 

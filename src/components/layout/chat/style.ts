@@ -75,6 +75,8 @@ export const ChatInputContainer = styled.div`
   background-color: ${({ theme }) => useNeutralColor(theme, '600')};
   border-radius: 0.5rem;
   display: flex;
+  flex-direction: column;
+  position: relative;
 
   width: 100%;
   padding: 0.5rem 0;
