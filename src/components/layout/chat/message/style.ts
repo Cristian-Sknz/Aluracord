@@ -1,8 +1,18 @@
 import { useNeutralColor } from '@styles/global';
 import styled from 'styled-components';
 
+export const MessageToolsContainer = styled.div`
+  position: absolute;
+  display: none;
+  right: 20px;
+  background: ${({theme}) => useNeutralColor(theme, '500')};
+  padding: .3rem;
+  border-radius: .5rem;
+`;
+
 export const ChatMessageItem = styled.li`
   display: flex;
+  position: relative;
   flex-direction: column;
   padding: .5rem;
   transition: 500ms;
@@ -10,6 +20,9 @@ export const ChatMessageItem = styled.li`
   :hover {
     background: rgba(0, 0, 0, 0.15);
     transition: 500ms;
+    & ${MessageToolsContainer} {
+      display: block;
+    }
   }
 `;
 
@@ -57,4 +70,17 @@ export const MessageLine = styled.p`
   line-height: 1.2;
   max-width: 900px;
   margin: 0;
+`;
+
+export const ToolsList = styled.ul`
+  display: flex;
+`;
+export const Tools = styled.li`
+  color: ${({theme}) => useNeutralColor(theme, '050')};
+  padding: .4rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  :hover {
+    background: ${({theme}) => useNeutralColor(theme, '700')};
+  }
 `;

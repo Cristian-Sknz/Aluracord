@@ -53,9 +53,7 @@ const reducer: React.Reducer<ChatReducerState, ChatAction> = (state, action) => 
     }
     
     case ChatActionType.DELETE_MESSAGE: {
-      return {
-        ...state,
-        messages: state.messages.filter((msg) => msg.id != action.payload.id),
+        return {...state, messages: state.messages.filter((msg) => msg.id != action.payload[0].id),
       };
     }
 
@@ -81,7 +79,7 @@ const ChatProvider: React.FC = ({ children }) => {
 
   const deleteMessage = useCallback((id: number) => {
     messages.delete().match({ id: id, author: user.id }).then();
-  }, []);
+  }, [user, messages]);
 
   const fetchMessages = useCallback(() => {
     messages.select('*, users (*)').then(({ data }) => {

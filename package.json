@@ -12,6 +12,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.17",
     "@supabase/supabase-js": "^1.29.4",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",

@@ -16,7 +16,7 @@ import {
 
 const Chat: React.FC = () => {
   const input = useRef<HTMLTextAreaElement>();
-  const { loading, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const chat = useChat();
 
   const send = useCallback(() => {
@@ -45,7 +45,12 @@ const Chat: React.FC = () => {
         <ChatMessageContainer>
           <ChatMessageList>
             {chat.state.messages.map((data) => (
-              <ChatMessage message={data} key={data.id} />
+              <ChatMessage 
+                onReply={(id) => console.log('Respondendo a mensagem:', id)}
+                onDelete={(data.author == user?.id) ? (id) => chat.deleteMessage(id) : null}
+                onEdit={(data.author == user?.id) ? (id) => console.log('Editando a mensagem:', id) : null}
+                message={data} 
+                key={data.id} />
             ))}
           </ChatMessageList>
         </ChatMessageContainer>
