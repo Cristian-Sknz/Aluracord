@@ -69,7 +69,7 @@ const reducer: React.Reducer<ChatReducerState, ChatAction> = (state, action) => 
 
 const ChatProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const messages = supabase.from<Message>('messages2');
+  const messages = supabase.from<Message>('messages');
   const users = supabase.from<GithubUser>('users');
   const { user } = useAuth();
 
