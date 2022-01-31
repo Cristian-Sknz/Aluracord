@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { GithubUser } from '@contexts/auth';
+import supabase from 'src/lib/supabase';
 import Jwt from 'jsonwebtoken';
+import { GithubUser } from '@contexts/types';
 
 const TOKEN_EXPIRES = 7200; // 2 hours
 
@@ -25,19 +26,33 @@ function handler(req: NextApiRequest, res: NextApiResponse) {
           message: 'Este usuario não foi encontrado.',
         });
         return;
-      }
+      } 
+
       const user = createUserObject(await response.json());
-      const token = Jwt.sign(user, process.env.APPLICATION_SECRET, {
-        expiresIn: TOKEN_EXPIRES, // 2 hours
+      const database = supabase.from<GithubUser>('users');
+      database.select('id').eq('id', user.id).then((response) => {
+        if(response.data.length == 0) {
+          database.insert(user).then();
+        } else {
+          database.update(user).then();
+        }
       });
 
-      res.status(200).json({
-        token_type: 'Bearer',
-        token,
-        expires: TOKEN_EXPIRES,
-      });
+      handleJWTResponse(user, res);
     }
   );
+}
+
+function handleJWTResponse(user: GithubUser, res: NextApiResponse) {
+  const token = Jwt.sign(user, process.env.APPLICATION_SECRET, {
+    expiresIn: TOKEN_EXPIRES, // 2 hours
+  });
+
+  res.status(200).json({
+    token_type: 'Bearer',
+    token,
+    expires: TOKEN_EXPIRES,
+  });
 }
 
 function createUserObject(json: any): GithubUser {

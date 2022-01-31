@@ -2,8 +2,6 @@ import React from 'react';
 import Head from 'next/head';
 import Home from '@components/layout/home';
 import { GetServerSideProps } from 'next';
-import { destroyCookie, parseCookies } from 'nookies';
-import Jwt from 'jsonwebtoken';
 import { isValidToken } from '@contexts/auth';
 
 const Index = () => {

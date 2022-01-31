@@ -3,18 +3,7 @@ import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import { getUser, signIn } from 'src/lib/api';
 import Jwt from 'jsonwebtoken'; 
 import Router from 'next/router';
-
-export type GithubUser = {
-  id: number;
-  name: string;
-  username: string;
-  bio: string;
-  location: string;
-  createdAt: string;
-  publicRepos: number;
-  followers: number;
-  following: number;
-};
+import { GithubUser } from './types';
 
 type AuthContextType = {
   isAutenticated: boolean;

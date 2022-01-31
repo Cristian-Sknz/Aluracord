@@ -44,7 +44,7 @@ const Chat: React.FC = () => {
         </ChatHeader>
         <ChatMessageContainer>
           <ChatMessageList>
-            {chat.messages.map((data) => (
+            {chat.state.messages.map((data) => (
               <ChatMessage message={data} key={data.id} />
             ))}
           </ChatMessageList>

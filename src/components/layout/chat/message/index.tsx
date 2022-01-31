@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { Message } from '@contexts/chat';
 import {
   Author,
   Avatar,
@@ -11,6 +10,7 @@ import {
   MessageDate,
   MessageDetails,
 } from './style';
+import { Message } from '@contexts/types';
 
 type ChatMessageProps = {
   message: Message;
@@ -23,8 +23,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     <ChatMessageItem>
       <MessageDetails>
         <MessageAuthor>
-          <Avatar src={message.avatarUrl} />
-          <Author>{message.author}</Author>
+          <Avatar src={`https://github.com/${message.users.username}.png`} />
+          <Author>{message.users.name}</Author>
         </MessageAuthor>
         <MessageDate title={date.format('LLLL')}>{date.calendar()}</MessageDate>
       </MessageDetails>
