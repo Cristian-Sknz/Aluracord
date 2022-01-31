@@ -35,9 +35,9 @@ enum HomeActionType {
 }
 
 const INITIAL_STATE: HomeReducerState = {
-  error: false,
+  error: true,
   loading: false,
-  username: 'Cristian'
+  username: ''
 }
 
 const homeReducer: React.Reducer<HomeReducerState, HomeAction> = (state, action) => {
