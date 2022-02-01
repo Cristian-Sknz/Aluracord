@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, SyntheticEvent, useCallback, useReducer } from 'react';
+import React, { ChangeEvent, FormEvent, SyntheticEvent, useCallback } from 'react';
 import { useAuth } from '@contexts/auth';
 import {
   HomeContainer,
@@ -14,51 +14,12 @@ import {
   UserImage,
   Username,
 } from './style';
+import useHomeReducer, { HomeActionType } from '@reducers/home';
 
 const RemImage = '/images/avatar/RemUwU.png';
 
-type HomeReducerState = {
-  username: string,
-  error: boolean,
-  loading: boolean;
-}
-
-type HomeAction = {
-  type: HomeActionType;
-  payload?: any;
-}
-
-enum HomeActionType {
-  NEW_USERNAME = 'NEW_USERNAME',
-  FAILED_USERNAME = 'FAILED_USERNAME',
-  SUCCESS_USERNAME = 'SUCCESS_USERNAME',
-}
-
-const INITIAL_STATE: HomeReducerState = {
-  error: true,
-  loading: false,
-  username: ''
-}
-
-const homeReducer: React.Reducer<HomeReducerState, HomeAction> = (state, action) => {
-  switch (action.type) {
-    case HomeActionType.FAILED_USERNAME: {
-      return { ...state, error: true, loading: false }
-    }
-    case HomeActionType.NEW_USERNAME: {
-      return { ...state, error: false, loading: true, username: action.payload.username }
-    }
-    case HomeActionType.SUCCESS_USERNAME: {
-      return { ...state, error: false, loading: false }
-    }
-    default: {
-      return state;
-    }
-  }
-}
-
 const Home: React.FC = () => {
-  const [state, dispatch] = useReducer(homeReducer, INITIAL_STATE);
+  const [state, dispatch] = useHomeReducer();
   const { authenticate } = useAuth();
 
   const onImageError = useCallback(() => {

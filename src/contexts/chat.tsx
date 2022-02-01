@@ -1,91 +1,23 @@
+import React, { useCallback, useEffect } from 'react';
 import moment from 'moment';
-import React, { useCallback, useEffect, useReducer } from 'react';
-import supabase from 'src/lib/supabase';
+import supabase from '@libs/supabase';
 import { useAuth } from './auth';
 import { Message, MessageType, GithubUser } from './types';
+import useChatReducer, { ChatAction, ChatActionType, ChatReducerState } from '@reducers/chat-context';
 
 const ChatContext = React.createContext({} as ChatContextType);
 
 type ChatContextType = {
   state: ChatReducerState;
-  action: {
-    sendMessage(message: string, isSticker?: boolean): void;
-    replyMessage(text: string, replyId:number, isSticker?: boolean): void
-    deleteMessage(messageId: number): void;
-    editMessage(text: string, messageId: number): void;
-    getMessageById(id: number): Message;
-  }
+  action: ChatContextActions;
 };
 
-type CreateMessageParams = {
-  user: GithubUser;
-  message: string;
-  isSticker?: boolean;
-};
-
-function createMessage(create: CreateMessageParams): Message {
-  return {
-    author: create.user.id,
-    date: moment().toISOString(),
-    message: create.message,
-    message_type: create.isSticker ? MessageType.STICKER : MessageType.TEXT,
-  };
-}
-
-const INITIAL_STATE: ChatReducerState = {
-  messages: [],
-};
-
-type ChatReducerState = {
-  messages: Message[];
-};
-
-enum ChatActionType {
-  ADD_MESSAGE = 'ADD_MESSAGE',
-  SET_MESSAGES = 'SET_MESSAGES',
-  UPDATE_MESSAGE = 'UPDATE_MESSAGE',
-  DELETE_MESSAGE = 'DELETE_MESSAGE',
-}
-
-type ChatAction = {
-  type: ChatActionType;
-  payload: any;
-};
-
-const reducer: React.Reducer<ChatReducerState, ChatAction> = (state, action) => {
-  switch (action.type) {
-    case ChatActionType.ADD_MESSAGE: {
-      return { ...state, messages: [...state.messages, ...action.payload] };
-    }
-
-    case ChatActionType.DELETE_MESSAGE: {
-      return {
-        ...state,
-        messages: state.messages.filter((msg) => msg.id != action.payload[0].id),
-      };
-    }
-
-    case ChatActionType.UPDATE_MESSAGE: {
-      return {
-        ...state,
-        messages: state.messages.map((msg) => {
-          if (msg.id === action.payload[0].id) {
-            action.payload[0].users = msg.users;
-            return action.payload[0];
-          }
-          return msg;
-        }),
-      };
-    }
-
-    case ChatActionType.SET_MESSAGES: {
-      return { ...state, messages: action.payload };
-    }
-
-    default: {
-      return state;
-    }
-  }
+type ChatContextActions = {
+  sendMessage(message: string, isSticker?: boolean): void;
+  replyMessage(text: string, replyId:number, isSticker?: boolean): void
+  deleteMessage(messageId: number): void;
+  editMessage(text: string, messageId: number): void;
+  getMessageById(id: number): Message;
 };
 
 type RealtimeChatParams = {
@@ -98,8 +30,7 @@ function useRealtimeChat({ state, dispatch }: RealtimeChatParams) {
   const users = supabase.from<GithubUser>('users');
 
   function onInsert(payload) {
-    users
-      .select('*')
+    users.select('*')
       .eq('id', payload.new.author)
       .then((user) => {
         payload.new['users'] = user.data[0];
@@ -135,8 +66,23 @@ function useRealtimeChat({ state, dispatch }: RealtimeChatParams) {
   return { subscribe, messages, users };
 }
 
+type CreateMessageParams = {
+  user: GithubUser;
+  message: string;
+  isSticker?: boolean;
+};
+
+function createMessage(create: CreateMessageParams): Message {
+  return {
+    author: create.user.id,
+    date: moment().toISOString(),
+    message: create.message,
+    message_type: create.isSticker ? MessageType.STICKER : MessageType.TEXT,
+  };
+}
+
 const ChatProvider: React.FC = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [state, dispatch] = useChatReducer();
   const { messages, subscribe } = useRealtimeChat({ state, dispatch });
   const { user } = useAuth();
 
@@ -173,8 +119,8 @@ const ChatProvider: React.FC = ({ children }) => {
   }, [messages]);
 
   useEffect(() => {
-    const realtime = subscribe();
     fetchMessages();
+    const realtime = subscribe();
     return () => {
       realtime.unsubscribe();
     };

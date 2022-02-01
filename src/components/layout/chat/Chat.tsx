@@ -15,55 +15,11 @@ import {
   ChatInputContainer,
   ChatInput
 } from './style';
+import useChatReducer, { UserChatAction } from '@reducers/chat';
 
-type UserChatState = {
-  action: UserChatAction;
-  messageId?: number;
-};
-
-export enum UserChatAction {
-  DEFAULT_MESSAGE = 'DEFAULT_MESSAGE',
-  EDIT_MESSAGE = 'EDIT_MESSAGE',
-  REPLY_MESSAGE = 'REPLY_MESSAGE',
-};
-
-type UserChatActionHandler = {
-  type: UserChatAction;
-  payload?: any;
-};
-
-const INITIAL_STATE = {
-  action: UserChatAction.DEFAULT_MESSAGE,
-  messageId: 0,
-};
-
-const userChatReducer: Reducer<UserChatState, UserChatActionHandler> = (state, action) => {
-  switch (action.type) {
-    case UserChatAction.EDIT_MESSAGE: {
-      return {
-        action: action.type,
-        messageId: action.payload.id,
-      };
-    }
-    case UserChatAction.DEFAULT_MESSAGE: {
-      return {
-        action: action.type,
-      };
-    }
-    case UserChatAction.REPLY_MESSAGE: {
-      return {
-        action: action.type,
-        messageId: action.payload.id,
-      };
-    }
-    default: {
-      return state;
-    }
-  }
-};
 
 const Chat: React.FC = () => {
-  const [state, dispatch] = useReducer(userChatReducer, INITIAL_STATE);
+  const [state, dispatch] = useChatReducer();
   const { user, loading, logout } = useAuth();
   const input = useRef<HTMLTextAreaElement>();
   const chat = useChat();

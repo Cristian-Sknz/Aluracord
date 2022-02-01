@@ -22,7 +22,9 @@
     "paths": {
       "@styles/*": ["styles/*"],
       "@components/*": ["src/components/*"],
-      "@contexts/*": ["src/contexts/*"]
+      "@contexts/*": ["src/contexts/*"],
+      "@reducers/*": ["src/reducers/*"],
+      "@libs/*": ["src/lib/*"]
     }
   },
   "include": [
