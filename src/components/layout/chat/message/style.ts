@@ -6,7 +6,7 @@ export const MessageToolsContainer = styled.div`
   display: none;
   right: 20px;
   background: ${({theme}) => useNeutralColor(theme, '500')};
-  padding: .3rem;
+  padding: .2rem;
   border-radius: .5rem;
 `;
 
@@ -93,6 +93,7 @@ export const Tools = styled.li`
   padding: .4rem;
   border-radius: .5rem;
   cursor: pointer;
+  font-size: .9rem;
   :hover {
     background: ${({theme}) => useNeutralColor(theme, '700')};
   }
@@ -107,6 +108,7 @@ export const ChangeActionDisplay = styled.div`
   border-radius: .5rem .5rem 0 0;
   position: relative;
   top: -.5rem;
+  user-select: none;
 `;
 
 export const ChangeActionCancelButton = styled.button`

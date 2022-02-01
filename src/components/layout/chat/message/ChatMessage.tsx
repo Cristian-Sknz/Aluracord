@@ -13,6 +13,7 @@ import {
 } from './style';
 import { Message } from '@contexts/types';
 import MessageTools, { MessageToolsProps } from './tools/MessageTools';
+import RepliedMessage from './reply/ReplyMessage';
 
 type ChatMessageProps = {
   message: Message;
@@ -27,19 +28,21 @@ const ChatMessage: React.FC<ChatMessageProps> = (props) => {
 
   return (
     <ChatMessageItem>
-      <MessageTools
-        message={props.message}
-        own={props.own}
-        onReply={props.onReply}
-        onEdit={props.onEdit}
-        onDelete={props.onDelete}
-      />
+      <RepliedMessage reply={reply}/>
       <MessageDetails>
         <MessageAuthor>
           <Avatar src={`https://github.com/${user.username}.png`} />
           <Author>{(user.name) ? user.name : user.username}</Author>
         </MessageAuthor>
         <MessageDate title={date.format('LLLL')}>{date.calendar()}</MessageDate>
+
+        <MessageTools
+          message={props.message}
+          own={props.own}
+          onReply={props.onReply}
+          onEdit={props.onEdit}
+          onDelete={props.onDelete}
+        />
       </MessageDetails>
 
       <MessageContainer>

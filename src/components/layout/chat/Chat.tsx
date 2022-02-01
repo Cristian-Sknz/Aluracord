@@ -140,7 +140,7 @@ const Chat: React.FC = () => {
                 onDelete={onDelete}
                 onEdit={onEdit}
                 message={data}
-                reply={chat.action.getMessageById(data.id)}
+                reply={chat.action.getMessageById(data?.reply)}
                 key={data.id}
               />
             ))}

@@ -16,10 +16,12 @@ const ActionDisplay: React.FC<ActionDisplayProps> = (props) => {
     return <></>
   }
 
+  const user = props.message.users;
+
   return (
     <ChangeActionDisplay>
       {(props.action == UserChatAction.REPLY_MESSAGE)
-      ? `Respondendo para ${props.message.users.name}`
+      ? `Respondendo para ${(user.name) ? user.name : user.username}`
       : 'Você está editando uma mensagem...'
       }
       <ChangeActionCancelButton>

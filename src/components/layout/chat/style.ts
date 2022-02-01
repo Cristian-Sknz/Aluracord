@@ -19,6 +19,7 @@ export const ChatContainer = styled.div`
     '. chat .'
     '. . .';
 
+  justify-content: center;
   justify-items: center;
   align-items: center;
 `;
@@ -32,6 +33,11 @@ export const ChatBox = styled.div`
   padding: 2rem;
 
   background-color: ${({ theme }) => useNeutralColor(theme, '700')};
+
+  @media screen and (max-width: 425px) {
+    width: 85%;
+    transition: 300ms;
+  }
 `;
 
 export const ChatHeader = styled.header`
