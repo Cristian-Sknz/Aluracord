@@ -1,7 +1,7 @@
 <h1 align="left">Aluracord - Imersão React</h1>
 
 <div>
-  <img align="left" width="165px" alt="Ram (UwU)" src="https://i.imgur.com/2MGyWda.gif">
+  <img align="left" width="165px" alt="Ram (UwU)" src="https://64.media.tumblr.com/e98594049ec130299c6c5a758c9bd3af/f8573a64a2b29677-dc/s500x750/0c29dfbbcde3dd7a710cb91b900dbe06fe35fd97.png">
   <h2>Sobre</h2>
   Este projeto foi criado durante a imersão React da Alura, foram 5 dias de imersão. Apesar de ter conhecimento do conteúdo apresentado na imersão, decidi participar para continuar praticando e aprimorar o meu conhecimento em React. Está imersão da Alura possibilitou com que diversos desenvolvedores, tanto iniciantes quando experientes na area se reunissem criando um grande variação de projetos.
 </div>
