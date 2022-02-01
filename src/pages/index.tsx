@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import Home from '@components/layout/home';
+import Home from '@components/layout/home/Home';
 import { GetServerSideProps } from 'next';
 import { isValidToken } from '@contexts/auth';
 

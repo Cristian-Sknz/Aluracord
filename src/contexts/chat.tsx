@@ -13,6 +13,7 @@ type ChatContextType = {
     replyMessage(text: string, replyId:number, isSticker?: boolean): void
     deleteMessage(messageId: number): void;
     editMessage(text: string, messageId: number): void;
+    getMessageById(id: number): Message;
   }
 };
 
@@ -157,6 +158,10 @@ const ChatProvider: React.FC = ({ children }) => {
     messages.update({message: text, edited: true}).match({id}).then();
   }, [user, messages]);
 
+  const getMessageById = useCallback((id: number) => {
+    return state.messages.find((message) => message.id == id);
+  }, [state.messages]);
+
   const fetchMessages = useCallback(() => {
     messages.select('*, users(*)')
       .order('id', {ascending: true}).then(({ data }) => {
@@ -183,7 +188,8 @@ const ChatProvider: React.FC = ({ children }) => {
           sendMessage, 
           deleteMessage, 
           editMessage, 
-          replyMessage
+          replyMessage,
+          getMessageById
         }
       }
     }>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import Chat from '@components/layout/chat';
+import Chat from '@components/layout/chat/Chat';
 import ChatProvider from 'src/contexts/chat';
 
 import { GetServerSideProps } from 'next';

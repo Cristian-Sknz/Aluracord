@@ -1,6 +1,6 @@
 import React from 'react';
 import { Message } from '@contexts/types';
-import { UserChatAction } from '../..';
+import { UserChatAction } from '../../Chat';
 import { ChangeActionCancelButton, ChangeActionDisplay } from '../style';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';

@@ -1,7 +1,9 @@
 import React, { KeyboardEvent, useCallback, useReducer, useRef, Reducer } from 'react';
 import { useAuth } from '@contexts/auth';
 import { useChat } from '@contexts/chat';
-import ChatMessage from './message';
+import { Message } from '@contexts/types';
+import ChatMessage from './message/ChatMessage';
+import ActionDisplay from './message/display/ActionDisplay';
 import {
   ChatBox,
   ChatContainer,
@@ -13,8 +15,6 @@ import {
   ChatInputContainer,
   ChatInput
 } from './style';
-import ActionDisplay from './message/display';
-import { Message } from '@contexts/types';
 
 type UserChatState = {
   action: UserChatAction;
@@ -25,7 +25,7 @@ export enum UserChatAction {
   DEFAULT_MESSAGE = 'DEFAULT_MESSAGE',
   EDIT_MESSAGE = 'EDIT_MESSAGE',
   REPLY_MESSAGE = 'REPLY_MESSAGE',
-}
+};
 
 type UserChatActionHandler = {
   type: UserChatAction;
@@ -77,12 +77,12 @@ const Chat: React.FC = () => {
     switch (state.action) {
       case UserChatAction.EDIT_MESSAGE: {
         chat.action.editMessage(value, state.messageId);
-        dispatch({ type: UserChatAction.DEFAULT_MESSAGE });
+        onCancel();
         break;
       }
       case UserChatAction.REPLY_MESSAGE: {
         chat.action.replyMessage(value, state.messageId);
-        dispatch({ type: UserChatAction.DEFAULT_MESSAGE })
+        onCancel();
         break;
       }
       case UserChatAction.DEFAULT_MESSAGE: {
@@ -140,6 +140,7 @@ const Chat: React.FC = () => {
                 onDelete={onDelete}
                 onEdit={onEdit}
                 message={data}
+                reply={chat.action.getMessageById(data.id)}
                 key={data.id}
               />
             ))}
