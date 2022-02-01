@@ -30,17 +30,10 @@ function handler(req: NextApiRequest, res: NextApiResponse) {
 
       const user = createUserObject(await response.json());
       const database = supabase.from<GithubUser>('users');
-      database.select('id').eq('id', user.id).then((response) => {
-        if(response.data.length == 0) {
-          database.insert(user).then();
-        } else {
-          database.update(user).then();
-        }
+      database.upsert(user).then((payload) => {
+        handleJWTResponse(payload.data[0], res);
       });
-
-      handleJWTResponse(user, res);
-    }
-  );
+    });
 }
 
 function handleJWTResponse(user: GithubUser, res: NextApiResponse) {
